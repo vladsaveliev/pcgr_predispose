@@ -1,8 +1,8 @@
-## *pcgr_predispose* - NGS-based cancer predisposition report
+## Personal Cancer Genome Reporter - cancer predisposition report
 
 ### Overview
 
-*pcgr_predispose* is a tool standing on the shoulders of [PCGR - Personal Cancer Genome Reporter](https://github.com/sigven). While PCGR focuses on the report of somatic variants, *pcgr_predispose* is intended for reporting of germline variants that may be of relevance for cancer predisposition.
+*pcgr_predispose* is a Docker-based workflow standing on the shoulders of [PCGR - Personal Cancer Genome Reporter](https://github.com/sigven). While PCGR focuses on the report of somatic variants, *pcgr_predispose* is intended for reporting of germline variants that may be of relevance for cancer predisposition.
 
 As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format (i.e. analyzing SNVs and InDels). The software reports, for a selected set of known (configurable) cancer predisposition genes, two main sets of variants:
 
