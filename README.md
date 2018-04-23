@@ -86,10 +86,10 @@ Run the workflow with **pcgr_predispose.py**, which takes the following argument
 
 
 
-The *pcgr_predispose* software bundle contains an example VCF file. It also contains a configuration file (*pcgr_predipose.toml*). Analysis of the example VCF can be performed by the following command:
+The *pcgr_predispose* software bundle contains an example VCF file. It also contains a configuration file (*pcgr_predispose.toml*). Analysis of the example VCF can be performed by the following command:
 
-`python ~/pcgr_predispose-0.3.0/pcgr_predispose.py --input_vcf ~/pcgr_predispose-0.3.0/example.vcf.gz`
-` ~/pcgr-0.6.0 ~/pcgr_predispose-0.3.0 grch37 ~/pcgr_predispose-0.3.0/pcgr_predispose_config.toml example`
+`python ~/pcgr_predispose-0.1.0/pcgr_predispose.py --input_vcf ~/pcgr_predispose-0.1.0/example.vcf.gz`
+` ~/pcgr-0.6.0 ~/pcgr_predispose-0.1.0 grch37 ~/pcgr_predispose-0.1.0/pcgr_predispose_config.toml example`
 
 Note that the example command also refers to the PCGR directory (*pcgr-0.6.0*), which needs to be present (see **STEP 0**)
 
