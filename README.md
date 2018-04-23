@@ -4,14 +4,18 @@
 
 *pcgr_predispose* is a tool standing on the shoulders of [PCGR - Personal Cancer Genome Reporter](https://github.com/sigven). While PCGR focuses on the report of somatic variants, *pcgr_predispose* is intended for reporting of germline variants that may be of relevance for cancer predisposition.
 
-As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the VCF format (i.e. analyzing SNVs and InDels). The software reports, for a selected set of known (configurable) cancer predisposition genes, two main sets of variants:
+As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format (i.e. analyzing SNVs and InDels). The software reports, for a selected set of known (configurable) cancer predisposition genes, two main sets of variants:
 
 1. Germline variants that are previously reported as pathogenic/likely pathogenic/uncertain significance in ClinVar (with no conflicting interpretations)
-2. Unclassified (i.e. not found in ClinVar) protein-coding germline variants that are either:
-	* *Novel* (i.e. not found in gnomAD), or
-	* *Rare* (MAF <= 0.001 in the gnomAD European population)
+2. Unclassified (i.e. not found in [ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/)) protein-coding germline variants that are either:
+	* *Novel* (i.e. not found in [gnomAD](http://gnomad.broadinstitute.org/)), or
+	* *Rare* (MAF <= 0.001 in the [gnomAD](http://gnomad.broadinstitute.org/) European population)
 
-#### Annotation resources included in _pcgr_predispose_ - 0.1.0
+### Example report
+
+* [Cancer predisposition report](http://folk.uio.no/sigven/example.pcgr_predispose.html)
+
+### Annotation resources included in _pcgr_predispose_ - 0.1.0
 
 * [VEP v92](http://www.ensembl.org/info/docs/tools/vep/index.html) - Variant Effect Predictor release 92 (GENCODE v19/v28 as the gene reference dataset)
 * [dBNSFP v3.5](https://sites.google.com/site/jpopgen/dbNSFP) - Database of non-synonymous functional predictions (August 2017)
@@ -32,7 +36,7 @@ As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the V
 
 #### STEP 0: Set up PCGR
 
-Make sure you have a working installation of the latest PCGR release (walk through [steps 0-3](https://github.com/sigven/pcgr#getting-started)).
+Make sure you have a working installation of the latest PCGR release (0.6*) (walk through [steps 0-3](https://github.com/sigven/pcgr#getting-started)).
 
 #### STEP 1: Download the latest release
 
