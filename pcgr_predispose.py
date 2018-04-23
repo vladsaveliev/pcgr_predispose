@@ -26,7 +26,7 @@ def __main__():
    parser.add_argument('configuration_file',help='Configuration file (TOML format)')
    parser.add_argument('sample_id',help="Sample identifier - prefix for output files")
    
-   docker_image_version = 'sigven/pcgr_predispose:' + str(version)
+   docker_image_version = 'sigven/pcgr:0.6.0'
    args = parser.parse_args()
    
    overwrite = 0
@@ -36,7 +36,7 @@ def __main__():
    # check that script and Docker image version correspond
    check_docker_command = 'docker images -q ' + str(docker_image_version)
    output = subprocess.check_output(str(check_docker_command), stderr=subprocess.STDOUT, shell=True)
-   logger = getlogger('pcgr-validate-config')
+   logger = getlogger('pcgr-predispose-validate-config')
    
    if(len(output) == 0):
       err_msg = 'Docker image ' + str(docker_image_version) + ' does not exist, pull image from Dockerhub (docker pull ' + str(docker_image_version) + ')'
@@ -52,7 +52,7 @@ def __main__():
    logger = getlogger('pcgr-check-files')
    host_directories = verify_input_files(args.input_vcf, args.configuration_file, config_options, args.pcgr_base_dir, args.output_dir, args.sample_id, args.genome_assembly, overwrite, logger)
 
-   run_pcgr(host_directories, docker_image_version, config_options, args.sample_id, args.genome_assembly, version, args.basic)
+   run_pcgr_predispose(host_directories, docker_image_version, config_options, args.sample_id, args.genome_assembly, version, args.basic)
 
 
 def read_config_options(configuration_file, pcgr_dir, genome_assembly, logger):
@@ -61,7 +61,7 @@ def read_config_options(configuration_file, pcgr_dir, genome_assembly, logger):
    pcgr_config_options = {}
    pcgr_configuration_file_default = os.path.join(pcgr_dir,'data',str(genome_assembly),'pcgr_configuration_predisposition_default.toml')
    if not os.path.exists(pcgr_configuration_file_default):
-      err_msg = "Default PCGR configuration file " + str(pcgr_configuration_file_default) + " does not exist - exiting"
+      err_msg = "Default pcgr_predispose configuration file " + str(pcgr_configuration_file_default) + " does not exist - exiting"
       pcgr_error_message(err_msg,logger)
    try:
       pcgr_config_options = toml.load(pcgr_configuration_file_default)
@@ -192,7 +192,7 @@ def verify_input_files(input_vcf, configuration_file, pcgr_config_options, base_
       err_msg = "Data directory for the specified genome assembly (" + str(db_assembly_dir) + ") does not exist"
       pcgr_error_message(err_msg,logger)
    
-   ## check the existence of RELEASE_NOTES (starting from 0.4.0)
+   ## check the existence of RELEASE_NOTES
    rel_notes_file = os.path.join(os.path.abspath(base_pcgr_dir),'data',genome_assembly,'RELEASE_NOTES')
    if not os.path.exists(rel_notes_file):
       err_msg = 'The PCGR data bundle is outdated - please download the latest data bundle (see github.com/sigven/pcgr_predispose for instructions)'
@@ -201,14 +201,14 @@ def verify_input_files(input_vcf, configuration_file, pcgr_config_options, base_
    f_rel_not = open(rel_notes_file,'r')
    compliant_data_bundle = 0
    for line in f_rel_not:
-      version_check = 'PCGR_DB_VERSION = 20180405'
+      version_check = 'PCGR_DB_VERSION = 20180422'
       if version_check in line:
          compliant_data_bundle = 1
    
    f_rel_not.close()
     
    if compliant_data_bundle == 0:
-      err_msg = 'The PCGR data bundle is not compliant with the software version - please download the latest software and data bundle (see https://github.com/sigven/pcgr for instructions)'
+      err_msg = 'The PCGR data bundle is not compliant with the software version - please download the latest software and data bundle (see https://github.com/sigven/pcgr_predispose for instructions)'
       pcgr_error_message(err_msg,logger)
    
    host_directories = {}
@@ -229,7 +229,7 @@ def check_subprocess(command):
       if len(output) > 0:
          print (str(output.decode()).rstrip())
    except subprocess.CalledProcessError as e:
-      print (e.output)
+      print (e.output.decode())
       exit(0)
 
 def getlogger(logger_name):
@@ -251,9 +251,9 @@ def getlogger(logger_name):
    
    return logger
 
-def run_pcgr(host_directories, docker_image_version, config_options, sample_id, genome_assembly, version, basic):
+def run_pcgr_predispose(host_directories, docker_image_version, config_options, sample_id, genome_assembly, version, basic):
    """
-   Main function to run the PCGR workflow using Docker
+   Main function to run the pcgr_predispose workflow using Docker
    """
    
    ## set basic Docker run commands
@@ -261,11 +261,9 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
    output_pass_vcf = 'None'
    output_pass_tsv = 'None'
    uid = ''
-   vep_version = '91'
+   vep_version = '92'
    gencode_version = 'release 27'
-   ncbi_build_maf = 'GRCh38'
    if genome_assembly == 'grch37':
-      ncbi_build_maf = 'GRCh37'
       gencode_version = 'release 19'
    logger = getlogger('pcgr-get-OS')
    if platform.system() == 'Linux' or platform.system() == 'Darwin' or sys.platform == 'darwin' or sys.platform == 'linux2' or sys.platform == 'linux':
@@ -298,7 +296,7 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
    
    
    ## verify VCF and CNA segment file
-   logger = getlogger('pcgr-validate-input')
+   logger = getlogger('pcgr-predispose-validate-input')
    logger.info("STEP 0: Validate input data")
    vcf_validate_command = str(docker_command_run1) + "pcgr_predispose_validate_input.py /data " + str(input_vcf_docker) + " " + str(input_conf_docker) + " " + str(genome_assembly) + "\""
    check_subprocess(vcf_validate_command)
@@ -320,11 +318,11 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
       vep_vcfanno_annotated_vcf = re.sub(r'\.vcfanno','.vcfanno.annotated',vep_vcfanno_vcf) + '.gz'
       vep_vcfanno_annotated_pass_vcf = re.sub(r'\.vcfanno','.vcfanno.annotated.pass',vep_vcfanno_vcf) + '.gz'
 
-      fasta_assembly = "/usr/local/share/vep/data/homo_sapiens/91_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz"
+      fasta_assembly = "/usr/local/share/vep/data/homo_sapiens/92_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz"
       vep_assembly = 'GRCh37'
       if genome_assembly == 'grch38':
          vep_assembly = 'GRCh38'
-         fasta_assembly = "/usr/local/share/vep/data/homo_sapiens/91_GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+         fasta_assembly = "/usr/local/share/vep/data/homo_sapiens/92_GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
       vep_options = "--vcf --check_ref --flag_pick_allele --force_overwrite --species homo_sapiens --assembly " + str(vep_assembly) + " --offline --fork " + str(config_options['other']['n_vep_forks']) + " --hgvs --dont_skip --failed 1 --af --af_1kg --af_gnomad --variant_class --regulatory --domains --symbol --protein --ccds --uniprot --appris --biotype --canonical --gencode_basic --cache --numbers --total_length --allele_number --no_escape --xref_refseq --dir /usr/local/share/vep/data"
       if config_options['other']['vep_skip_intergenic'] == 1:
          vep_options = vep_options + " --no_intergenic"
@@ -332,7 +330,7 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
       vep_sed_command =  str(docker_command_run1) + "sed -r 's/:p\.[A-Z]{1}[a-z]{2}[0-9]+=//g' " + str(vep_tmp_vcf) + " > " + str(vep_vcf) + "\""
       vep_bgzip_command = str(docker_command_run1) + "bgzip -f " + str(vep_vcf) + "\""
       vep_tabix_command = str(docker_command_run1) + "tabix -f -p vcf " + str(vep_vcf) + ".gz" + "\""
-      logger = getlogger('pcgr-vep')
+      logger = getlogger('pcgr-predispose-vep')
 
       print()
       logger.info("STEP 1: Basic variant annotation with Variant Effect Predictor (" + str(vep_version) + ", GENCODE " + str(gencode_version) + ", " + str(genome_assembly) + ")")
@@ -352,7 +350,7 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
    
       ## summarise command
       print()
-      logger = getlogger("pcgr-summarise")
+      logger = getlogger("pcgr-predispose-summarise")
       pcgr_summarise_command = str(docker_command_run2) + "pcgr_summarise.py " + str(vep_vcfanno_vcf) + ".gz /data/data/" + str(genome_assembly) + "\""
       logger.info("STEP 3: Cancer gene annotations with pcgr-summarise")
       check_subprocess(pcgr_summarise_command)
@@ -378,10 +376,9 @@ def run_pcgr(host_directories, docker_image_version, config_options, sample_id, 
    
    ## Generation of HTML reports for VEP/vcfanno-annotated VCF and copy number segment file
    if not basic: 
-      logger = getlogger('pcgr-writer')
+      logger = getlogger('pcgr-predispose-writer')
       logger.info("STEP 4: Generation of output files - cancer predisposition report")
       pcgr_report_command = str(docker_command_run1) + "/pcgr_predispose.R /workdir/output " + str(output_pass_tsv) + ".gz " +  str(sample_id)  + " " + str(input_conf_docker) + " " + str(version) + " " + str(genome_assembly) + "\""
-      #print(pcgr_report_command)
       check_subprocess(pcgr_report_command)
       logger.info("Finished")
    
