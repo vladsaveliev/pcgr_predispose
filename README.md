@@ -2,7 +2,7 @@
 
 ### Overview
 
-*pcgr_predispose* is a Docker-based workflow standing on the shoulders of [PCGR - Personal Cancer Genome Reporter](https://github.com/sigven). While PCGR focuses on the report of somatic variants, *pcgr_predispose* is intended for reporting of germline variants that may be of relevance for cancer predisposition.
+*pcgr_predispose* is a Docker-based workflow standing on the shoulders of [PCGR - Personal Cancer Genome Reporter](https://github.com/sigven). While PCGR focuses on the report of somatic variants, *pcgr_predispose* is intended for reporting of NGS-detected germline variants that may be of relevance for cancer predisposition.
 
 As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format (i.e. analyzing SNVs and InDels). The software reports, for a selected set of known (configurable) cancer predisposition genes, two main sets of variants:
 
@@ -15,7 +15,7 @@ As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [
 
 * [Cancer predisposition report](http://folk.uio.no/sigven/example.pcgr_predispose.html)
 
-### Annotation resources included in _pcgr_predispose_ - 0.1.0
+### Annotation resources included in _pcgr_predispose - 0.1.0_
 
 * [VEP v92](http://www.ensembl.org/info/docs/tools/vep/index.html) - Variant Effect Predictor release 92 (GENCODE v19/v28 as the gene reference dataset)
 * [dBNSFP v3.5](https://sites.google.com/site/jpopgen/dbNSFP) - Database of non-synonymous functional predictions (August 2017)
@@ -30,11 +30,11 @@ As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [
 
 ### News
 
-* April 25th 2018 - 0.1.0 release
+* April 24th 2018 - 0.1.0 release
 
 ### Getting started
 
-#### STEP 0: Set up PCGR
+#### STEP 0: Install PCGR
 
 Make sure you have a working installation of the latest PCGR release (0.6*) (walk through [steps 0-3](https://github.com/sigven/pcgr#getting-started)).
 
@@ -91,13 +91,13 @@ The *pcgr_predispose* software bundle contains an example VCF file. It also cont
 `python ~/pcgr_predispose-0.1.0/pcgr_predispose.py --input_vcf ~/pcgr_predispose-0.1.0/example.vcf.gz`
 ` ~/pcgr-0.6.0 ~/pcgr_predispose-0.1.0 grch37 ~/pcgr_predispose-0.1.0/pcgr_predispose_config.toml example`
 
-Note that the example command also refers to the PCGR directory (*pcgr-0.6.0*), which needs to be present (see **STEP 0**)
+Note that the example command also refers to the PCGR directory (*pcgr-0.6.0*), which needs to be present (see **STEP 0: Install PCGR**)
 
 This command will run the Docker-based *pcgr_predispose* workflow and produce the following output files in the _pcgr_predispose_ folder:
 
   1. __example.pcgr_predispose.pass.vcf.gz (.tbi)__ - Bgzipped VCF file with functional/clinical annotations
-  2. __example.pcgr_predispose.pass.tsv.gz__ - Compressed TSV file with functional/clinical annotations
-  3. __example.pcgr_predispose.html__ - HTML report with clinically relevant variant in cancer predisposition genes
+  2. __example.pcgr_predispose.pass.tsv.gz__ - Compressed TSV file (generated with [vcf2tsv](https://github.com/sigven/vcf2tsv)) with functional/clinical annotations
+  3. __example.pcgr_predispose.html__ - Interactive HTML report with clinically relevant variants in cancer predisposition genes
   4. __example.pcgr_predispose.json__ - JSON dump of HTML report content
 
 
