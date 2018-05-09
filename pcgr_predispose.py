@@ -11,7 +11,7 @@ import getpass
 import platform
 import toml
 
-version = '0.1.0'
+version = '0.2.0'
 
 def __main__():
    
@@ -26,7 +26,7 @@ def __main__():
    parser.add_argument('configuration_file',help='Configuration file (TOML format)')
    parser.add_argument('sample_id',help="Sample identifier - prefix for output files")
    
-   docker_image_version = 'sigven/pcgr:0.6.0'
+   docker_image_version = 'sigven/pcgr:0.6.2'
    args = parser.parse_args()
    
    overwrite = 0
@@ -201,7 +201,7 @@ def verify_input_files(input_vcf, configuration_file, pcgr_config_options, base_
    f_rel_not = open(rel_notes_file,'r')
    compliant_data_bundle = 0
    for line in f_rel_not:
-      version_check = 'PCGR_DB_VERSION = 20180422'
+      version_check = 'PCGR_DB_VERSION = 20180509'
       if version_check in line:
          compliant_data_bundle = 1
    
@@ -307,9 +307,9 @@ def run_pcgr_predispose(host_directories, docker_image_version, config_options, 
       
       ## Define input, output and temporary file names
       pcgr_model = 'pcgr_predispose'
-      output_vcf = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.vcf.gz'
-      output_pass_vcf = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.pass.vcf.gz'
-      output_pass_tsv = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.pass.tsv'
+      output_vcf = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.' + str(genome_assembly) + '.vcf.gz'
+      output_pass_vcf = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.' + str(genome_assembly) + '.pass.vcf.gz'
+      output_pass_tsv = '/workdir/output/' + str(sample_id) + '.' + str(pcgr_model) + '.' + str(genome_assembly) + '.pass.tsv'
       input_vcf_pcgr_predispose_ready = '/workdir/output/' + re.sub(r'(\.vcf$|\.vcf\.gz$)','.pcgr_predispose_ready.vcf.gz',host_directories['input_vcf_basename_host'])
       input_vcf_pcgr_predispose_ready_uncompressed = '/workdir/output/' + re.sub(r'(\.vcf$|\.vcf\.gz$)','.pcgr_predispose_ready.vcf',host_directories['input_vcf_basename_host'])
       vep_vcf = re.sub(r'(\.vcf$|\.vcf\.gz$)','.pcgr_vep.vcf',input_vcf_pcgr_predispose_ready)

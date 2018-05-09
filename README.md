@@ -15,28 +15,31 @@ As is the case for PCGR, *pcgr_predispose* accepts a query file encoded in the [
 
 * [Cancer predisposition report](http://folk.uio.no/sigven/example.pcgr_predispose.html)
 
-### Annotation resources included in _pcgr_predispose - 0.1.0_
+### Annotation resources included in _pcgr_predispose - 0.2.0_
 
 * [VEP v92](http://www.ensembl.org/info/docs/tools/vep/index.html) - Variant Effect Predictor release 92 (GENCODE v19/v28 as the gene reference dataset)
 * [dBNSFP v3.5](https://sites.google.com/site/jpopgen/dbNSFP) - Database of non-synonymous functional predictions (August 2017)
 * [gnomAD r2](http://gnomad.broadinstitute.org/) - Germline variant frequencies exome-wide (October 2017)
 * [dbSNP b150](http://www.ncbi.nlm.nih.gov/SNP/) - Database of short genetic variants (February 2017)
 * [1000 Genomes Project - phase3](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/) - Germline variant frequencies genome-wide (May 2013)
-* [ClinVar](http://www.ncbi.nlm.nih.gov/clinvar/) - Database of clinically related variants (April 2018)
+* [ClinVar](http://www.ncbi.nlm.nih.gov/clinvar/) - Database of clinically related variants (May 2018)
 * [DisGeNET](http://www.disgenet.org) - Database of gene-disease associations (v5.0, May 2017)
-* [UniProt/SwissProt KnowledgeBase 2018_03](http://www.uniprot.org) - Resource on protein sequence and functional information (March 2018)
+* [UniProt/SwissProt KnowledgeBase 2018_04](http://www.uniprot.org) - Resource on protein sequence and functional information (April 2018)
 * [Pfam v31](http://pfam.xfam.org) - Database of protein families and domains (March 2017)
 * [TSGene v2.0](http://bioinfo.mc.vanderbilt.edu/TSGene/) - Tumor suppressor/oncogene database (November 2015)
 
 ### News
 
+* May 9th 2018 - 0.2.0 release
+	* PCGR data bundle update
+	* Minor fixes, added genome assembly to output files
 * April 24th 2018 - 0.1.0 release
 
 ### Getting started
 
 #### STEP 0: Install PCGR
 
-Make sure you have a working installation of the latest PCGR release (0.6*) (walk through [steps 0-3](https://github.com/sigven/pcgr#getting-started)).
+Make sure you have a working installation of the latest PCGR release (0.6.2) (walk through [steps 0-3](https://github.com/sigven/pcgr#getting-started)).
 
 #### STEP 1: Download the latest release
 
@@ -88,17 +91,17 @@ Run the workflow with **pcgr_predispose.py**, which takes the following argument
 
 The *pcgr_predispose* software bundle contains an example VCF file. It also contains a configuration file (*pcgr_predispose.toml*). Analysis of the example VCF can be performed by the following command:
 
-`python ~/pcgr_predispose-0.1.0/pcgr_predispose.py --input_vcf ~/pcgr_predispose-0.1.0/example.vcf.gz`
-` ~/pcgr-0.6.0 ~/pcgr_predispose-0.1.0 grch37 ~/pcgr_predispose-0.1.0/pcgr_predispose_config.toml example`
+`python ~/pcgr_predispose-0.2.0/pcgr_predispose.py --input_vcf ~/pcgr_predispose-0.2.0/example.vcf.gz`
+` ~/pcgr-0.6.0 ~/pcgr_predispose-0.2.0 grch37 ~/pcgr_predispose-0.2.0/pcgr_predispose_config.toml example`
 
 Note that the example command also refers to the PCGR directory (*pcgr-0.6.0*), which needs to be present (see **STEP 0: Install PCGR**)
 
 This command will run the Docker-based *pcgr_predispose* workflow and produce the following output files in the _pcgr_predispose_ folder:
 
-  1. __example.pcgr_predispose.pass.vcf.gz (.tbi)__ - Bgzipped VCF file with functional/clinical annotations
-  2. __example.pcgr_predispose.pass.tsv.gz__ - Compressed TSV file (generated with [vcf2tsv](https://github.com/sigven/vcf2tsv)) with functional/clinical annotations
-  3. __example.pcgr_predispose.html__ - Interactive HTML report with clinically relevant variants in cancer predisposition genes
-  4. __example.pcgr_predispose.json__ - JSON dump of HTML report content
+  1. __example.pcgr_predispose.grch37.pass.vcf.gz (.tbi)__ - Bgzipped VCF file with functional/clinical annotations
+  2. __example.pcgr_predispose.grch37.pass.tsv.gz__ - Compressed TSV file (generated with [vcf2tsv](https://github.com/sigven/vcf2tsv)) with functional/clinical annotations
+  3. __example.pcgr_predispose.grch37.html__ - Interactive HTML report with clinically relevant variants in cancer predisposition genes
+  4. __example.pcgr_predispose.grch37.json__ - JSON dump of HTML report content
 
 
 ### Contact
