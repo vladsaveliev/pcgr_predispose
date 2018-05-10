@@ -251,7 +251,7 @@ def getlogger(logger_name):
    
    return logger
 
-def run_pcgr_predispose(host_directories, docker_image_version, config_options, sample_id, genome_assembly, version, basic):
+def run_pcgr_predispose(host_directories, docker_image_version, config_options, sample_id, genome_assembly, version, basic, output_dir):
    """
    Main function to run the pcgr_predispose workflow using Docker
    """
@@ -344,7 +344,7 @@ def run_pcgr_predispose(host_directories, docker_image_version, config_options, 
       print()
       logger = getlogger('pcgr-predispose-vcfanno')
       logger.info("STEP 2: Annotation for cancer predisposition with pcgr-vcfanno (ClinVar, dbNSFP, UniProtKB, CiVIC, DoCM)")
-      pcgr_vcfanno_command = str(docker_command_run2) + "pcgr_vcfanno.py --num_processes "  + str(config_options['other']['n_vcfanno_proc']) + " --dbnsfp --docm --clinvar --civic --uniprot --pcgr_onco_xref " + str(vep_vcf) + ".gz " + str(vep_vcfanno_vcf) + " /data/data/" + str(genome_assembly) + "\""
+      pcgr_vcfanno_command = str(docker_command_run2) + "pcgr_vcfanno.py --num_processes " + str(config_options['other']['n_vcfanno_proc']) + " --dbnsfp --docm --clinvar --civic --uniprot --pcgr_onco_xref " + str(vep_vcf) + ".gz " + str(vep_vcfanno_vcf) + " " + os.path.join(data_dir, str(genome_assembly)) + "\""
       check_subprocess(pcgr_vcfanno_command)
       logger.info("Finished")
    
@@ -371,14 +371,14 @@ def run_pcgr_predispose(host_directories, docker_image_version, config_options, 
       logger.info("Finished")
 
       #return
-  
+
    print()
    
    ## Generation of HTML reports for VEP/vcfanno-annotated VCF and copy number segment file
    if not basic: 
       logger = getlogger('pcgr-predispose-writer')
       logger.info("STEP 4: Generation of output files - cancer predisposition report")
-      pcgr_report_command = str(docker_command_run1) + "/pcgr_predispose.R /workdir/output " + str(output_pass_tsv) + ".gz " +  str(sample_id)  + " " + str(input_conf_docker) + " " + str(version) + " " + str(genome_assembly) + "\""
+      pcgr_report_command = str(docker_command_run1) + "/pcgr_predispose.R " + os.path.join(output_dir, str(output_pass_tsv) + ".gz") + " " +  str(sample_id)  + " " + str(input_conf_docker) + " " + str(version) + " " + str(genome_assembly) + "\""
       check_subprocess(pcgr_report_command)
       logger.info("Finished")
    
