@@ -26,7 +26,7 @@ def __main__():
    parser.add_argument('configuration_file',help='Configuration file (TOML format)')
    parser.add_argument('sample_id',help="Sample identifier - prefix for output files")
    
-   docker_image_version = 'sigven/pcgr:0.6.2'
+   docker_image_version = 'sigven/pcgr:0.6.2.1'
    args = parser.parse_args()
    
    overwrite = 0
@@ -52,7 +52,7 @@ def __main__():
    logger = getlogger('pcgr-check-files')
    host_directories = verify_input_files(args.input_vcf, args.configuration_file, config_options, args.pcgr_base_dir, args.output_dir, args.sample_id, args.genome_assembly, overwrite, logger)
 
-   run_pcgr_predispose(host_directories, docker_image_version, config_options, args.sample_id, args.genome_assembly, version, args.basic)
+   run_pcgr_predispose(host_directories, docker_image_version, config_options, args.sample_id, args.genome_assembly, version, args.basic, args.output_dir)
 
 
 def read_config_options(configuration_file, pcgr_dir, genome_assembly, logger):
